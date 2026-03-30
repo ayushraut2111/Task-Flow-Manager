@@ -4,6 +4,10 @@ from core.config import settings
 
 
 class JWTTokenAuth:
+
+    TOKEN_TYPE_REFRESH = "refresh"
+    TOKEN_TYPE_ACCESS = "access"
+
     def __init__(self):
         self.access_token_expire_minutes=30
         self.refresh_token_expire_minutes=7
@@ -12,12 +16,12 @@ class JWTTokenAuth:
 
     def create_access_token(self,user_id: str) -> str:
         expire = datetime.utcnow() + timedelta(minutes=self.access_token_expire_minutes)
-        return jwt.encode({"user_id": user_id, "exp": expire, "type": "access"}, self.secret_key, algorithm=self.algorithm)
+        return jwt.encode({"user_id": user_id, "exp": expire, "type": self.TOKEN_TYPE_ACCESS}, self.secret_key, algorithm=self.algorithm)
 
 
     def create_refresh_token(self,user_id: str) -> str:
         expire = datetime.utcnow() + timedelta(days=self.refresh_token_expire_minutes)
-        return jwt.encode({"user_id": user_id, "exp": expire, "type": "refresh"}, self.secret_key, algorithm=self.algorithm)
+        return jwt.encode({"user_id": user_id, "exp": expire, "type": self.TOKEN_TYPE_REFRESH}, self.secret_key, algorithm=self.algorithm)
 
 
     def decode_token(self,token: str) -> dict:
