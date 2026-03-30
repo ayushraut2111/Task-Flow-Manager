@@ -37,3 +37,11 @@ class TokenResponse(BaseModel):
 
 class RefreshSchema(BaseModel):
     refresh_token: str
+
+
+class UserSchema(BaseModel):
+    username: str
+    name: str
+    phone: str
+    email: str | None
+    is_active: bool
